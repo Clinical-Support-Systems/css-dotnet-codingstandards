@@ -1,11 +1,10 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C1F5A879-3A26-4621-ADB7-3B1C59CBC8B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workleap.DotNet.CodingStandards.Tests", "tests\Workleap.DotNet.CodingStandards.Tests\Workleap.DotNet.CodingStandards.Tests.csproj", "{640037BA-49DF-4BBD-9858-3DC89E2739FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSS.DotNet.CodingStandards.Tests", "tests\CSS.DotNet.CodingStandards.Tests\CSS.DotNet.CodingStandards.Tests.csproj", "{640037BA-49DF-4BBD-9858-3DC89E2739FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigurationFilesGenerator", "tools\ConfigurationFilesGenerator\ConfigurationFilesGenerator.csproj", "{2A95B554-DB07-434B-82C3-8D056819DED4}"
 EndProject

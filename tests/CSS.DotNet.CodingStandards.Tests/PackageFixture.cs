@@ -1,8 +1,8 @@
 using CliWrap;
 using CliWrap.Buffered;
-using Workleap.DotNet.CodingStandards.Tests.Helpers;
+using CSS.DotNet.CodingStandards.Tests.Helpers;
 
-namespace Workleap.DotNet.CodingStandards.Tests;
+namespace CSS.DotNet.CodingStandards.Tests;
 
 public sealed class PackageFixture : IAsyncLifetime
 {
@@ -12,7 +12,7 @@ public sealed class PackageFixture : IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        var nuspecPath = Path.Combine(PathHelpers.GetRootDirectory(), "Workleap.DotNet.CodingStandards.nuspec");
+        var nuspecPath = Path.Combine(PathHelpers.GetRootDirectory(), "CSS.DotNet.CodingStandards.nuspec");
         string[] args = ["pack", nuspecPath, "-ForceEnglishOutput", "-Version", "999.9.9", "-OutputDirectory", this._packageDirectory.FullPath];
 
         if (OperatingSystem.IsWindows())

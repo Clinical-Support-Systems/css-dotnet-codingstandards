@@ -1,7 +1,7 @@
-# Workleap.DotNet.CodingStandards
+# CSS.DotNet.CodingStandards
 
-[![nuget](https://img.shields.io/nuget/v/Workleap.DotNet.CodingStandards.svg?logo=nuget)](https://www.nuget.org/packages/Workleap.DotNet.CodingStandards/)
-[![build](https://img.shields.io/github/actions/workflow/status/workleap/wl-dotnet-codingstandards/publish.yml?logo=github&branch=main)](https://github.com/workleap/wl-dotnet-codingstandards/actions/workflows/publish.yml)
+[![nuget](https://img.shields.io/nuget/v/CSS.DotNet.CodingStandards.svg?logo=nuget)](https://www.nuget.org/packages/CSS.DotNet.CodingStandards/)
+[![build](https://img.shields.io/github/actions/workflow/status/CSS/wl-dotnet-codingstandards/publish.yml?logo=github&branch=main)](https://github.com/CSS/wl-dotnet-codingstandards/actions/workflows/publish.yml)
 
 This package provides a set of **programming standards for .NET projects**, including rules for **style**, **quality**, **security**, and **performance**. It relies on [built-in .NET analyzers](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/overview) that are shipped with the .NET SDK.
 
@@ -15,12 +15,12 @@ During development, the package will provide warnings :warning: when standards a
 Install the NuGet package in your project:
 
 ```
-dotnet add package Workleap.DotNet.CodingStandards
+dotnet add package CSS.DotNet.CodingStandards
 ```
 
 If you are using [StyleCop.Analyzers](https://www.nuget.org/packages/StyleCop.Analyzers), you can safely remove it from your project. You can also remove the relevant parts of your `.editorconfig` files which contain analysis rules configuration.
 
-If you also have a `Directory.Build.props` file in your solution, you can remove properties that are [already set by this package](src/buildTransitive/Workleap.DotNet.CodingStandards.props).
+If you also have a `Directory.Build.props` file in your solution, you can remove properties that are [already set by this package](src/buildTransitive/CSS.DotNet.CodingStandards.props).
 
 ## What's included
 
@@ -138,4 +138,4 @@ To publish a new public (non-preview) version, simply create a new release on Gi
 
 ## License
 
-Copyright © 2024, Workleap. This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/workleap/gsoft-license/blob/master/LICENSE.
+Copyright © 2024, CSS. This code is licensed under the Apache License, Version 2.0. You may obtain a copy of this license at https://github.com/CSS/gsoft-license/blob/master/LICENSE.

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Workleap.DotNet.CodingStandards</id>
+    <id>CSS.DotNet.CodingStandards</id>
     <version>$version$</version>
-    <authors>Workleap</authors>
-    <owners>Workleap</owners>
+    <authors>CSS</authors>
+    <owners>CSS</owners>
     <developmentDependency>true</developmentDependency>
     <license type="expression">Apache-2.0</license>
     <readme>README.md</readme>
-    <projectUrl>https://github.com/workleap/wl-dotnet-codingstandards</projectUrl>
-    <description>Workleap recommended coding standards for .NET.</description>
-    <copyright>Copyright © Workleap</copyright>
+    <projectUrl>https://github.com/Clinical-Support-Systems/css-dotnet-codingstandards</projectUrl>
+    <description>CSS recommended coding standards for .NET.</description>
+    <copyright>Copyright © Clinical Support Systems</copyright>
     <repository type="git" url="$RepositoryUrl$" commit="$RepositoryCommit$" branch="$RepositoryBranch$" />
     <dependencies>
       <dependency id="Meziantou.Analyzer" version="2.0.201" />

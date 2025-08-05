@@ -4,7 +4,7 @@ using System.Text.Json;
 using CliWrap;
 using Xunit.Sdk;
 
-namespace Workleap.DotNet.CodingStandards.Tests.Helpers;
+namespace CSS.DotNet.CodingStandards.Tests.Helpers;
 
 internal sealed class ProjectBuilder : IDisposable
 {
@@ -35,7 +35,7 @@ internal sealed class ProjectBuilder : IDisposable
                         <package pattern="*" />
                     </packageSource>
                     <packageSource key="TestSource">
-                        <package pattern="Workleap.DotNet.CodingStandards" />
+                        <package pattern="CSS.DotNet.CodingStandards" />
                     </packageSource>
                   </packageSourceMapping>
                 </configuration>
@@ -85,7 +85,7 @@ internal sealed class ProjectBuilder : IDisposable
                   {propertyElement}
 
                   <ItemGroup>
-                    <PackageReference Include="Workleap.DotNet.CodingStandards" Version="*" />
+                    <PackageReference Include="CSS.DotNet.CodingStandards" Version="*" />
                   </ItemGroup>
                   {referencesElement}
                 </Project>

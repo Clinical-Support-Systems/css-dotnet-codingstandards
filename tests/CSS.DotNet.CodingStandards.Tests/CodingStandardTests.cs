@@ -1,9 +1,9 @@
 using System.IO.Compression;
 using System.Reflection.PortableExecutable;
-using Workleap.DotNet.CodingStandards.Tests.Helpers;
+using CSS.DotNet.CodingStandards.Tests.Helpers;
 using Xunit.Abstractions;
 
-namespace Workleap.DotNet.CodingStandards.Tests;
+namespace CSS.DotNet.CodingStandards.Tests;
 
 public sealed class CodingStandardTests(PackageFixture fixture, ITestOutputHelper testOutputHelper) : IClassFixture<PackageFixture>
 {
@@ -183,7 +183,7 @@ public sealed class CodingStandardTests(PackageFixture fixture, ITestOutputHelpe
                   </PropertyGroup>
                   
                   <ItemGroup>
-                    <PackageReference Include="Workleap.DotNet.CodingStandards" Version="*" />
+                    <PackageReference Include="CSS.DotNet.CodingStandards" Version="*" />
                     <PackageReference Include="System.Text.Json" Version="8.0.1" NoWarn="NU1903" />
                   </ItemGroup>
                 </Project>
@@ -212,7 +212,7 @@ public sealed class CodingStandardTests(PackageFixture fixture, ITestOutputHelpe
                   </PropertyGroup>
                   
                   <ItemGroup>
-                    <PackageReference Include="Workleap.DotNet.CodingStandards" Version="*" />
+                    <PackageReference Include="CSS.DotNet.CodingStandards" Version="*" />
                   </ItemGroup>
                 </Project>
                 """);
@@ -242,7 +242,7 @@ public sealed class CodingStandardTests(PackageFixture fixture, ITestOutputHelpe
                   </PropertyGroup>
                   
                   <ItemGroup>
-                    <PackageReference Include="Workleap.DotNet.CodingStandards" Version="*" />
+                    <PackageReference Include="CSS.DotNet.CodingStandards" Version="*" />
                   </ItemGroup>
                 </Project>
                 """);

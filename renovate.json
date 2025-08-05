@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "github>workleap/renovate-config",
-    "github>workleap/renovate-config:all-automerge.json"
+    "github>CSS/renovate-config",
+    "github>CSS/renovate-config:all-automerge.json"
   ]
 }
