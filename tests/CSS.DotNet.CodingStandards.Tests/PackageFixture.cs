@@ -4,6 +4,9 @@ using CSS.DotNet.CodingStandards.Tests.Helpers;
 
 namespace CSS.DotNet.CodingStandards.Tests;
 
+/// <summary>
+/// Fixture for creating a NuGet package for testing purposes.
+/// </summary>
 public sealed class PackageFixture : IAsyncLifetime
 {
     private readonly TemporaryDirectory _packageDirectory = TemporaryDirectory.Create();

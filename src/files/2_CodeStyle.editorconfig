@@ -63,7 +63,7 @@ dotnet_remove_unnecessary_suppression_exclusions = none
 
 # New line preferences
 dotnet_style_allow_multiple_blank_lines_experimental = false
-dotnet_style_allow_statement_immediately_after_block_experimental = false
+dotnet_style_allow_statement_immediately_after_block_experimental = true
 
 #### C# Coding Conventions ####
 
@@ -199,6 +199,10 @@ dotnet_naming_rule.private_fields_should_be_camel_case_underscore_prefix.severit
 dotnet_naming_rule.private_fields_should_be_camel_case_underscore_prefix.symbols = private_fields
 dotnet_naming_rule.private_fields_should_be_camel_case_underscore_prefix.style = camel_case_underscore_prefix
 
+dotnet_naming_rule.static_fields_should_be_s_prefix.severity = suggestion
+dotnet_naming_rule.static_fields_should_be_s_prefix.symbols = static_fields
+dotnet_naming_rule.static_fields_should_be_s_prefix.style = s_prefix_style
+
 dotnet_naming_rule.static_readonly_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.static_readonly_fields_should_be_pascal_case.symbols = static_readonly_fields
 dotnet_naming_rule.static_readonly_fields_should_be_pascal_case.style = pascal_case
@@ -212,6 +216,10 @@ dotnet_naming_rule.local_variables_should_be_camel_case.symbols = local_variable
 dotnet_naming_rule.local_variables_should_be_camel_case.style = camel_case
 
 # Symbol specifications
+
+dotnet_naming_symbols.static_fields.applicable_kinds = field
+dotnet_naming_symbols.static_fields.applicable_accessibilities = private, private_protected
+dotnet_naming_symbols.static_fields.required_modifiers = static
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -242,6 +250,9 @@ dotnet_naming_symbols.local_variables.applicable_accessibilities = local
 dotnet_naming_symbols.local_variables.required_modifiers =
 
 # Naming styles
+
+dotnet_naming_style.s_prefix_style.required_prefix = s_
+dotnet_naming_style.s_prefix_style.capitalization = camel_case
 
 dotnet_naming_style.pascal_case.required_prefix =
 dotnet_naming_style.pascal_case.required_suffix =
