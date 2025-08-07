@@ -960,7 +960,7 @@ dotnet_diagnostic.SA1648.severity = none
 # SA1649: File name should match first type name
 # Help link: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1649.md
 # Enabled: True, Severity: warning
-dotnet_diagnostic.SA1649.severity = warning
+dotnet_diagnostic.SA1649.severity = none
 
 # SA1650: Element documentation should be spelled correctly
 # Help link: https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1650.md
