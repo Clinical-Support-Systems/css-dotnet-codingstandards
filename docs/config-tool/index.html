@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS .NET Coding Standards - Rule Configuration Tool</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .rules-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .rule-item {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.2s;
+        }
+
+        .rule-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .rule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rule-id {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .rule-title {
+            flex: 1;
+            margin-left: 15px;
+            font-size: 1rem;
+        }
+
+        .severity-selector {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .severity-selector:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .severity-none { border-color: #999; color: #999; }
+        .severity-silent { border-color: #999; color: #666; }
+        .severity-suggestion { border-color: #4CAF50; color: #4CAF50; }
+        .severity-warning { border-color: #FF9800; color: #FF9800; }
+        .severity-error { border-color: #f44336; color: #f44336; }
+
+        .rule-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .rule-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .category-style { background: #E3F2FD; color: #1976D2; }
+        .category-quality { background: #E8F5E9; color: #388E3C; }
+        .category-security { background: #FFEBEE; color: #D32F2F; }
+        .category-performance { background: #FFF3E0; color: #F57C00; }
+        .category-other { background: #F5F5F5; color: #616161; }
+
+        .rule-description {
+            margin-top: 10px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .help-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
+        }
+
+        .export-section {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .export-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .export-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .export-button:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .template-selector {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .template-button {
+            background: white;
+            border: 2px solid #e0e0e0;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .template-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .template-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        const templates = {
+            default: { name: 'Default', description: 'All rules as configured' },
+            api: { name: 'API Project', description: 'Optimized for Web API projects' },
+            library: { name: 'Library', description: 'Optimized for class libraries' },
+            blazor: { name: 'Blazor', description: 'Optimized for Blazor applications' },
+            test: { name: 'Test Project', description: 'Relaxed rules for test projects' }
+        };
+
+        function App() {
+            const [rules, setRules] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [categoryFilter, setCategoryFilter] = useState('all');
+            const [severityFilter, setSeverityFilter] = useState('all');
+            const [template, setTemplate] = useState('default');
+            const [customSeverities, setCustomSeverities] = useState({});
+            const [currentPage, setCurrentPage] = useState(1);
+            const rulesPerPage = 50;
+
+            useEffect(() => {
+                fetch('../rules-metadata.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Remove duplicates by rule ID
+                        const uniqueRules = [];
+                        const seen = new Set();
+                        for (const rule of data) {
+                            if (!seen.has(rule.id)) {
+                                seen.add(rule.id);
+                                uniqueRules.push(rule);
+                            }
+                        }
+                        setRules(uniqueRules);
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        console.error('Error loading rules:', error);
+                        setLoading(false);
+                    });
+            }, []);
+
+            const filteredRules = useMemo(() => {
+                return rules.filter(rule => {
+                    const matchesSearch = searchTerm === '' ||
+                        rule.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        rule.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        rule.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+                    const matchesCategory = categoryFilter === 'all' || rule.category.toLowerCase() === categoryFilter.toLowerCase();
+
+                    const currentSeverity = customSeverities[rule.id] || rule.defaultSeverity;
+                    const matchesSeverity = severityFilter === 'all' || currentSeverity === severityFilter;
+
+                    return matchesSearch && matchesCategory && matchesSeverity;
+                });
+            }, [rules, searchTerm, categoryFilter, severityFilter, customSeverities]);
+
+            const paginatedRules = useMemo(() => {
+                const startIndex = (currentPage - 1) * rulesPerPage;
+                return filteredRules.slice(startIndex, startIndex + rulesPerPage);
+            }, [filteredRules, currentPage]);
+
+            const totalPages = Math.ceil(filteredRules.length / rulesPerPage);
+
+            const categories = useMemo(() => {
+                const cats = new Set(rules.map(r => r.category));
+                return ['all', ...Array.from(cats)];
+            }, [rules]);
+
+            const stats = useMemo(() => {
+                const byCategory = {};
+                rules.forEach(rule => {
+                    byCategory[rule.category] = (byCategory[rule.category] || 0) + 1;
+                });
+                return {
+                    total: rules.length,
+                    modified: Object.keys(customSeverities).length,
+                    byCategory
+                };
+            }, [rules, customSeverities]);
+
+            const handleSeverityChange = (ruleId, newSeverity) => {
+                setCustomSeverities(prev => ({
+                    ...prev,
+                    [ruleId]: newSeverity
+                }));
+            };
+
+            const applyTemplate = (templateName) => {
+                setTemplate(templateName);
+                if (templateName === 'default') {
+                    setCustomSeverities({});
+                    return;
+                }
+
+                const newSeverities = {};
+                rules.forEach(rule => {
+                    if (templateName === 'test') {
+                        // Relax rules for test projects
+                        if (rule.category === 'Style') {
+                            newSeverities[rule.id] = 'silent';
+                        } else if (rule.defaultSeverity === 'error') {
+                            newSeverities[rule.id] = 'warning';
+                        }
+                    } else if (templateName === 'api') {
+                        // Emphasize security and performance for APIs
+                        if (rule.category === 'Security' && rule.defaultSeverity !== 'error') {
+                            newSeverities[rule.id] = 'error';
+                        }
+                    } else if (templateName === 'library') {
+                        // Emphasize quality for libraries
+                        if (rule.category === 'Quality' && rule.defaultSeverity === 'warning') {
+                            newSeverities[rule.id] = 'error';
+                        }
+                    }
+                });
+                setCustomSeverities(newSeverities);
+            };
+
+            const exportConfig = () => {
+                let config = '# Custom .editorconfig generated by CSS .NET Coding Standards Configuration Tool\n';
+                config += `# Template: ${templates[template].name}\n`;
+                config += `# Generated: ${new Date().toISOString()}\n\n`;
+                config += '[*.cs]\n\n';
+
+                const sortedRules = Object.entries(customSeverities).sort(([a], [b]) => a.localeCompare(b));
+                
+                if (sortedRules.length === 0) {
+                    config += '# No custom severity overrides configured\n';
+                } else {
+                    sortedRules.forEach(([ruleId, severity]) => {
+                        const rule = rules.find(r => r.id === ruleId);
+                        if (rule && severity !== rule.defaultSeverity) {
+                            config += `# ${rule.title}\n`;
+                            config += `dotnet_diagnostic.${ruleId}.severity = ${severity}\n\n`;
+                        }
+                    });
+                }
+
+                const blob = new Blob([config], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '.editorconfig';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            if (loading) {
+                return <div className="loading">Loading rules...</div>;
+            }
+
+            return (
+                <div className="container">
+                    <header>
+                        <h1>🔧 Rule Configuration Tool</h1>
+                        <p>Interactive configuration for CSS .NET Coding Standards - {stats.total} rules</p>
+                    </header>
+
+                    <div className="controls">
+                        <div className="template-selector">
+                            <label>Project Templates</label>
+                            <div>
+                                {Object.entries(templates).map(([key, tmpl]) => (
+                                    <button
+                                        key={key}
+                                        className={`template-button ${template === key ? 'active' : ''}`}
+                                        onClick={() => applyTemplate(key)}
+                                        title={tmpl.description}
+                                    >
+                                        {tmpl.name}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="control-row">
+                            <div className="control-group">
+                                <label>Search Rules</label>
+                                <input
+                                    type="text"
+                                    placeholder="Search by ID, title, or description..."
+                                    value={searchTerm}
+                                    onChange={(e) => {
+                                        setSearchTerm(e.target.value);
+                                        setCurrentPage(1);
+                                    }}
+                                />
+                            </div>
+                            <div className="control-group">
+                                <label>Category</label>
+                                <select value={categoryFilter} onChange={(e) => {
+                                    setCategoryFilter(e.target.value);
+                                    setCurrentPage(1);
+                                }}>
+                                    {categories.map(cat => (
+                                        <option key={cat} value={cat}>
+                                            {cat === 'all' ? 'All Categories' : cat}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="control-group">
+                                <label>Severity</label>
+                                <select value={severityFilter} onChange={(e) => {
+                                    setSeverityFilter(e.target.value);
+                                    setCurrentPage(1);
+                                }}>
+                                    <option value="all">All Severities</option>
+                                    <option value="none">None</option>
+                                    <option value="silent">Silent</option>
+                                    <option value="suggestion">Suggestion</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error">Error</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="stats">
+                        <div className="stat-card">
+                            <h3>{filteredRules.length}</h3>
+                            <p>Filtered Rules</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.modified}</h3>
+                            <p>Modified Rules</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.byCategory['Style'] || 0}</h3>
+                            <p>Style Rules</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.byCategory['Quality'] || 0}</h3>
+                            <p>Quality Rules</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.byCategory['Security'] || 0}</h3>
+                            <p>Security Rules</p>
+                        </div>
+                        <div className="stat-card">
+                            <h3>{stats.byCategory['Performance'] || 0}</h3>
+                            <p>Performance Rules</p>
+                        </div>
+                    </div>
+
+                    <div className="rules-container">
+                        {paginatedRules.length === 0 ? (
+                            <div className="no-results">No rules match your filters</div>
+                        ) : (
+                            paginatedRules.map(rule => (
+                                <div key={rule.id + rule.packageId} className="rule-item">
+                                    <div className="rule-header">
+                                        <span className="rule-id">{rule.id}</span>
+                                        <span className="rule-title">{rule.title}</span>
+                                        <select
+                                            className={`severity-selector severity-${customSeverities[rule.id] || rule.defaultSeverity}`}
+                                            value={customSeverities[rule.id] || rule.defaultSeverity}
+                                            onChange={(e) => handleSeverityChange(rule.id, e.target.value)}
+                                        >
+                                            <option value="none">None</option>
+                                            <option value="silent">Silent</option>
+                                            <option value="suggestion">Suggestion</option>
+                                            <option value="warning">Warning</option>
+                                            <option value="error">Error</option>
+                                        </select>
+                                    </div>
+                                    <div className="rule-meta">
+                                        <span className={`rule-category category-${rule.category.toLowerCase()}`}>
+                                            {rule.category}
+                                        </span>
+                                        {rule.helpUrl && (
+                                            <a href={rule.helpUrl} target="_blank" rel="noopener noreferrer" className="help-link">
+                                                📖 Documentation
+                                            </a>
+                                        )}
+                                        <span>Default: {rule.defaultSeverity}</span>
+                                        <span>Package: {rule.packageId}</span>
+                                    </div>
+                                    {rule.description && (
+                                        <div className="rule-description">{rule.description}</div>
+                                    )}
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                            <button
+                                onClick={() => setCurrentPage(1)}
+                                disabled={currentPage === 1}
+                            >
+                                First
+                            </button>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                            >
+                                Previous
+                            </button>
+                            <span style={{ padding: '8px 16px' }}>
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                            >
+                                Next
+                            </button>
+                            <button
+                                onClick={() => setCurrentPage(totalPages)}
+                                disabled={currentPage === totalPages}
+                            >
+                                Last
+                            </button>
+                        </div>
+                    )}
+
+                    <div className="export-section">
+                        <button className="export-button" onClick={exportConfig}>
+                            💾 Export Configuration
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
