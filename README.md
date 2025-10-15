@@ -70,6 +70,33 @@ It also includes multiple `.editorconfig` files that are automatically imported 
 
 ## Facilitating package adoption
 
+### 🚀 Automated Migration Tool (Recommended)
+
+We provide an **automated migration assistant** that dramatically simplifies the adoption process:
+
+```bash
+# Install the tool
+dotnet tool install --global CSS.DotNet.CodingStandards.Migrator
+
+# Analyze your codebase
+css-migrator analyze <path-to-solution> --output report.txt
+
+# Apply fixes in stages with automatic commits
+css-migrator fix <path-to-solution> --commit
+```
+
+The migrator tool:
+- ✅ Analyzes codebases and generates detailed violation reports
+- ✅ Categorizes issues by migration stage (formatting → naming → logic → manual)
+- ✅ Automatically fixes issues in batches with separate commits
+- ✅ Generates PR descriptions with before/after statistics
+- ✅ Suggests rule suppressions for problematic areas
+- ✅ Provides rollback capability per stage
+
+**[View Migrator Documentation →](tools/Migrator/README.md)**
+
+### Manual Migration (Alternative)
+
 From experience, installing the package will result in numerous warnings, the majority of which are related to code formatting. We recommend addressing these in several steps to minimize the impact on code review, using the [dotnet format](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-format) utility, which is included in the .NET SDK.
 
 Firstly, warnings related to code formatting **can be automatically corrected**. This includes: indentation, unnecessary spaces, empty lines, braces, file-scoped namespaces, unnecessary using directives, etc. Here is the command to execute:
@@ -85,6 +112,8 @@ dotnet format <path_to_your_solution_or_project> --severity warn --verbosity dia
 ```
 
 You can also modify the command to specify the IDs of the analysis rules you wish to automatically correct (if a fix is available). In this way, you avoid manual work, and breaking the correction into several pull requests will increase developers' confidence in the process of adopting new standards.
+
+### Configuring Rules
 
 All rules included in this package **can be disabled or modified** in an `.editorconfig` file that you can add to your project. You can also **disable a rule for a specific line or block of code** using `#pragma` directives or `[SuppressMessage]` attributes. Learn more about [configuring code analysis rules](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/suppress-warnings). Remember to always justify why a rule is disabled or modified. Here're some examples:
 
