@@ -22,6 +22,19 @@ If you are using [StyleCop.Analyzers](https://www.nuget.org/packages/StyleCop.An
 
 If you also have a `Directory.Build.props` file in your solution, you can remove properties that are [already set by this package](src/buildTransitive/CSS.DotNet.CodingStandards.props).
 
+## 🔧 Interactive Rule Configuration Tool
+
+We provide an [interactive web-based configuration tool](https://clinical-support-systems.github.io/css-dotnet-codingstandards/config-tool/) that makes it easy to customize rules for your project:
+
+- **Browse all 500+ rules** with descriptions and help links
+- **Filter by category**: Style, Quality, Security, Performance
+- **Search** by rule ID, title, or description
+- **Adjust severities** interactively with live preview
+- **Apply templates** for different project types (API, Library, Blazor, Test)
+- **Export configuration** as a custom `.editorconfig` snippet
+
+This tool dramatically reduces adoption friction and makes customization accessible to all skill levels.
+
 ## What's included
 
 - Code style and formatting options, including indentation, line wrapping, encoding, new lines preferences, and more.

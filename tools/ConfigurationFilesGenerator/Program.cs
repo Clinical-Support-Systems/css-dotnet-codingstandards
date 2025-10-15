@@ -17,11 +17,35 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using NuGet.Frameworks;
+using System.Text.Json;
 
 var rootFolder = GetRootFolderPath();
 
 var writtenFiles = 0;
 var packages = await GetAllReferencedNuGetPackages();
+var allRules = new List<RuleMetadata>();
+
+#pragma warning disable CA1869 // Cache and reuse 'JsonSerializerOptions' instances - this is only called once at the end
+var jsonOptions = new JsonSerializerOptions
+{
+    WriteIndented = true,
+    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+};
+#pragma warning restore CA1869
+
+static string GetSeverityString(DiagnosticSeverity? severity)
+{
+    return severity switch
+    {
+        null => "none",
+        DiagnosticSeverity.Hidden => "silent",
+        DiagnosticSeverity.Info => "suggestion",
+        DiagnosticSeverity.Warning => "warning",
+        DiagnosticSeverity.Error => "error",
+        _ => throw new Exception($"Severity '{severity}' is not supported"),
+    };
+}
+
 await Parallel.ForEachAsync(packages, async (item, cancellationToken) =>
 {
     var (packageId, packageVersion) = item;
@@ -30,6 +54,7 @@ await Parallel.ForEachAsync(packages, async (item, cancellationToken) =>
     var configurationFilePath = rootFolder / "src" / "files" / "analyzers" / ("Analyzer." + packageId + ".editorconfig");
 
     var rules = new HashSet<AnalyzerRule>();
+    var category = DetermineCategoryFromPackageId(packageId);
     foreach (var assembly in await GetAnalyzerReferences(packageId, packageVersion))
     {
         foreach (var type in assembly.GetTypes())
@@ -43,6 +68,22 @@ await Parallel.ForEachAsync(packages, async (item, cancellationToken) =>
             foreach (var diagnostic in analyzer.SupportedDiagnostics)
             {
                 rules.Add(new AnalyzerRule(diagnostic.Id, diagnostic.Title.ToString(CultureInfo.InvariantCulture), diagnostic.HelpLinkUri, diagnostic.IsEnabledByDefault, diagnostic.DefaultSeverity, diagnostic.IsEnabledByDefault ? diagnostic.DefaultSeverity : null));
+
+                // Add to allRules for JSON export
+                lock (allRules)
+                {
+                    allRules.Add(new RuleMetadata
+                    {
+                        Id = diagnostic.Id,
+                        Title = diagnostic.Title.ToString(CultureInfo.InvariantCulture),
+                        HelpUrl = diagnostic.HelpLinkUri ?? "",
+                        Category = category,
+                        DefaultSeverity = GetSeverityString(diagnostic.DefaultSeverity),
+                        IsEnabledByDefault = diagnostic.IsEnabledByDefault,
+                        Description = diagnostic.Description.ToString(CultureInfo.InvariantCulture),
+                        PackageId = packageId,
+                    });
+                }
             }
         }
     }
@@ -106,21 +147,29 @@ await Parallel.ForEachAsync(packages, async (item, cancellationToken) =>
         configurationFilePath.CreateParentDirectory();
         await File.WriteAllTextAsync(configurationFilePath, text, cancellationToken);
         _ = Interlocked.Increment(ref writtenFiles);
+    }
 
-        static string GetSeverity(DiagnosticSeverity? severity)
+    static string GetSeverity(DiagnosticSeverity? severity)
+    {
+        return severity switch
         {
-            return severity switch
-            {
-                null => "none",
-                DiagnosticSeverity.Hidden => "silent",
-                DiagnosticSeverity.Info => "suggestion",
-                DiagnosticSeverity.Warning => "warning",
-                DiagnosticSeverity.Error => "error",
-                _ => throw new Exception($"Severity '{severity}' is not supported"),
-            };
-        }
+            null => "none",
+            DiagnosticSeverity.Hidden => "silent",
+            DiagnosticSeverity.Info => "suggestion",
+            DiagnosticSeverity.Warning => "warning",
+            DiagnosticSeverity.Error => "error",
+            _ => throw new Exception($"Severity '{severity}' is not supported"),
+        };
     }
 });
+
+// Export rule metadata as JSON
+var jsonOutputPath = rootFolder / "docs" / "rules-metadata.json";
+jsonOutputPath.CreateParentDirectory();
+
+var rulesJson = JsonSerializer.Serialize(allRules.OrderBy(r => r.Id).ToList(), jsonOptions);
+await File.WriteAllTextAsync(jsonOutputPath, rulesJson);
+Console.WriteLine($"Exported {allRules.Count} rules to {jsonOutputPath}");
 
 if (writtenFiles > 0)
 {
@@ -388,6 +437,32 @@ static (AnalyzerConfiguration[] Rules, string[] Unknowns) GetConfiguration(FullP
     return (rules.ToArray(), unknowns.ToArray());
 }
 
+static string DetermineCategoryFromPackageId(string packageId)
+{
+    return packageId switch
+    {
+        var id when id.Contains("StyleCop") => "Style",
+        var id when id.Contains("CodeStyle") => "Style",
+        var id when id.Contains("Security") => "Security",
+        var id when id.Contains("Performance") => "Performance",
+        var id when id.Contains("NetAnalyzers") => "Quality",
+        var id when id.Contains("BannedApi") => "Security",
+        _ => "Other"
+    };
+}
+
 internal sealed record AnalyzerConfiguration(string Id, string[] Comments, DiagnosticSeverity? Severity);
 
 internal sealed record AnalyzerRule(string Id, string Title, string? Url, bool Enabled, DiagnosticSeverity DefaultSeverity, DiagnosticSeverity? DefaultEffectiveSeverity);
+
+internal sealed class RuleMetadata
+{
+    public string Id { get; set; } = "";
+    public string Title { get; set; } = "";
+    public string HelpUrl { get; set; } = "";
+    public string Category { get; set; } = "";
+    public string DefaultSeverity { get; set; } = "";
+    public bool IsEnabledByDefault { get; set; }
+    public string Description { get; set; } = "";
+    public string PackageId { get; set; } = "";
+}
